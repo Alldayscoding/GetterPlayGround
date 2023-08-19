@@ -5,6 +5,8 @@ import com.getter.getterplay.boardEntity.GetterBoard;
 import com.getter.getterplay.boardRepository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,12 +32,18 @@ public class BoardServiceImpl implements BoardService {
  }
 
  @Override
- public List<GetterBoard> list() {
+ public Page<GetterBoard> list(Pageable pageable) {
 
-  List<GetterBoard> listBoard =  boardRepository.findAll();
+  Page<GetterBoard> listBoard =  boardRepository.findAll(pageable);
   return listBoard;
 
  }
+
+@Override
+public Page<GetterBoard> boardSearch(String keyword, Pageable pageable) {
+
+  return boardRepository.findByTitleContaining(keyword, pageable);
+}
 
  @Override
  public BoardDTO getOne(Long bno) {

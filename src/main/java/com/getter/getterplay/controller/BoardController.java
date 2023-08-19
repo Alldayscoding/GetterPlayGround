@@ -7,6 +7,10 @@ import com.getter.getterplay.boardService.BoardService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +29,35 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("")
-    public String boardGET(Model model){
-        List<GetterBoard> boardList = boardService.list();
+    public String boardGET(Model model,
+                           @PageableDefault(page = 0, size = 3, sort = "bno", direction = Sort.Direction.DESC)Pageable pageable,
+                            String keyword) {
+
+        log.info("keyword------->>{}", keyword);
+
+        Page<GetterBoard> boardList = null;
+        if(keyword == null){
+            boardList = boardService.list(pageable);
+        }else {
+            boardList = boardService.boardSearch(keyword, pageable);
+        }
+
+
+        /* nowPage = current page
+        *  startPage = start page in block
+        *  endPage = end page in block
+        */
+
+        boardList = boardService.list(pageable);
+        int nowPage = boardList.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, boardList.getTotalPages());
+
         model.addAttribute("boardList", boardList);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "board/board";
     }
 

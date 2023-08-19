@@ -7,8 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @Slf4j
@@ -44,4 +50,13 @@ public class BoardServiceImplTest {
         log.info("board.....>>>>>{}", board);
     }
 
+
+    @Test
+    public void searchTest(){
+        String keyword = "백엔드";
+        Pageable pageable = PageRequest.of(0, 3);
+        Page<GetterBoard> result = boardRepository.findByTitleContaining(keyword, pageable);
+        log.info("result..........>>{}", result);
+
+    }
 }

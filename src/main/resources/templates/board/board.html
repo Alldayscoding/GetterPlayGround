@@ -112,23 +112,25 @@
 
 
         <!--Pagenation start-->
-        <nav aria-label="Page navigation example" class="mt-4">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+
+
+<!--        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">-->
+<!--            <ul class="pagination pagination-sm list-inline text-center d-flex justify-content-center align-items-center">-->
+<!--                <li class="page-item list-inline-item">-->
+<!--                    <a class="page-link" th:if="${page != nowPage}" th:href="@{/board(page = ${page -1})}" th:text="${page}"></a>-->
+<!--                </li>-->
+<!--                <li class="page-item list-inline-ite">-->
+<!--                    <a class="page-link" th:if="${page == nowPage}" th:text="${page}" style="background-color:cornflowerblue"></a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </th:block>-->
+<!--        -->
+
+        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                     <a th:if="${page != nowPage}" th:href="@{/board(page = ${page -1})}" th:text="${page}"></a>
+                    <strong th:if="${page == nowPage}" th:text="${page}" style="background-color:cornflowerblue"></strong>
+        </th:block>
+
         <!--Pagenation end-->
     </div>
 </main>
